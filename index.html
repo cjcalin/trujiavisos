@@ -402,7 +402,10 @@ select:focus, input:focus { border-color: var(--azul); }
 </div>
 
 <script>
-document.querySelectorAll('.stab').forEach(b => {
+const SUPABASE_URL = 'https://klfrhbrwcbeuzfuiuiid.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_WXisgwicC8m-W0iZVBu4dQ_ph0VttD9';
+
+document.querySelectorAll('.stab').forEach(b => {document.querySelectorAll('.stab').forEach(b => {
   b.addEventListener('click', () => {
     document.querySelectorAll('.stab').forEach(x => x.classList.remove('on'));
     b.classList.add('on');
