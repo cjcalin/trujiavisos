@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publicar aviso · TrujiAvisos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --azul: #0a2463; --rojo: #c1121f; --gris: #f4f6fa; --borde: rgba(10,36,99,0.1); --texto: #1a1a2e; --muted: #6b7280; }
+body { font-family: 'Inter', sans-serif; background: var(--gris); color: var(--texto); }
+.topbar { background: var(--rojo); padding: 6px 24px; }
+.topbar a { color: white; font-size: 12px; text-decoration: none; font-family: sans-serif; }
+.hero { background: var(--azul); padding: 24px; text-align: center; }
+.hero-logo { font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: white; letter-spacing: -1px; }
+.hero-logo em { color: var(--rojo); font-style: normal; }
+.hero-sub { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 6px; }
+.wrap { max-width: 600px; margin: 24px auto; padding: 0 16px; }
+.card { background: white; border: 1px solid var(--borde); border-radius: 14px; overflow: hidden; }
+.card-head { background: var(--azul); color: white; padding: 18px 24px; }
+.card-title { font-size: 18px; font-weight: 700; }
+.card-sub { font-size: 12px; color: rgba(255,255,255,.6); margin-top: 4px; }
+.card-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.lbl { font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+input, select, textarea { border: 1px solid var(--borde); padding: 10px 12px; font-size: 13px; font-family: 'Inter',sans-serif; color: var(--texto); background: var(--gris); border-radius: 8px; outline: none; width: 100%; }
+input:focus, select:focus, textarea:focus { border-color: var(--azul); }
+textarea { resize: vertical; }
+.hint { font-size: 11px; color: var(--muted); }
+.cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.cat-opt input { display: none; }
+.cat-box { border: 2px solid var(--borde); padding: 12px 8px; text-align: center; border-radius: 10px; cursor: pointer; transition: all .15s; }
+.cat-opt input:checked + .cat-box { border-color: var(--azul); background: #f0f4ff; }
+.cat-box-icon { font-size: 22px; display: block; margin-bottom: 5px; }
+.cat-box-name { font-size: 11px; font-weight: 600; color: var(--texto); }
+.eg-toggle { display: flex; gap: 10px; }
+.eg-opt input { display: none; }
+.eg-btn { flex: 1; border: 2px solid var(--borde); padding: 10px; text-align: center; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: 'Inter',sans-serif; font-weight: 500; color: var(--muted); transition: all .15s; }
+.eg-opt input:checked + .eg-btn { border-color: #ca8a04; background: #fffbeb; color: #854d0e; font-weight: 700; }
+.terms { display: flex; gap: 10px; align-items: flex-start; font-size: 11px; color: var(--muted); line-height: 1.6; }
+.terms input { width: auto; margin-top: 2px; flex-shrink: 0; }
+.btn-pub { width: 100%; background: var(--azul); color: white; border: none; padding: 14px; font-size: 14px; font-weight: 700; border-radius: 10px; cursor: pointer; transition: background .2s; }
+.btn-pub:hover { background: var(--rojo); }
+.btn-pub:disabled { background: var(--muted); cursor: not-allowed; }
+#msg { display: none; padding: 12px; border-radius: 8px; font-size: 13px; font-family: sans-serif; text-align: center; }
+.msg-ok { background: #d1fae5; color: #065f46; }
+.msg-err { background: #fee2e2; color: #7f1d1d; }
+.wa-btn { display: block; width: 100%; background: #16a34a; color: white; border: none; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 10px; cursor: pointer; text-align: center; text-decoration: none; margin-top: 8px; }
+.divider { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11px; }
+.divider-line { flex: 1; height: 1px; background: var(--borde); }
+.foot { background: var(--azul); color: rgba(255,255,255,.3); font-size: 10px; text-align: center; padding: 14px; letter-spacing: .06em; margin-top: 24px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← Volver a TrujiAvisos</a>
+</div>
+
+<div class="hero">
+  <div class="hero-logo">Truji<em>Avisos</em></div>
+  <div class="hero-sub">Publicar aviso · gratis · desaparece en 24 horas</div>
+</div>
+
+<div class="wrap">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-title">Nuevo aviso</div>
+      <div class="card-sub">Tu número no se mostrará. Solo tu nick es público.</div>
+    </div>
+    <div class="card-body">
+
+      <div class="field">
+        <span class="lbl">¿Eres recién egresado?</span>
+        <div class="eg-toggle">
+          <label class="eg-opt"><input type="radio" name="egresado" value="si"><div class="eg-btn">⭐ Sí, recién egresado</div></label>
+          <label class="eg-opt"><input type="radio" name="egresado" value="no" checked><div class="eg-btn">Tengo experiencia</div></label>
+        </div>
+        <span class="hint">Los avisos de egresados aparecen destacados.</span>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Categoría</span>
+        <div class="cat-grid">
+          <label class="cat-opt"><input type="radio" name="categoria" value="salud" required><div class="cat-box"><span class="cat-box-icon">🩺</span><span class="cat-box-name">Salud</span></div></label>
+          <label class="cat-opt"><input type="radio" name="categoria" value="hogar"><div class="cat-box"><span class="cat-box-icon">🔧</span><span class="cat-box-name">Hogar</span></div></label>
+          <label class="cat-opt"><input type="radio" name="categoria" value="belleza"><div class="cat-box"><span class="cat-box-icon">💆</span><span class="cat-box-name">Belleza</span></div></label>
+          <label class="cat-opt"><input type="radio" name="categoria" value="cocina"><div class="cat-box"><span class="cat-box-icon">🍳</span><span class="cat-box-name">Cocina</span></div></label>
+          <label class="cat-opt"><input type="radio" name="categoria" value="tecnico"><div class="cat-box"><span class="cat-box-icon">🖥️</span><span class="cat-box-name">Técnico</span></div></label>
+          <label class="cat-opt"><input type="radio" name="categoria" value="clasif"><div class="cat-box"><span class="cat-box-icon">📋</span><span class="cat-box-name">Clasificado</span></div></label>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Tu nick (nombre público)</span>
+        <input type="text" id="nick" placeholder="ej: Fisio_Trujillo, ElectricoJR..." maxlength="30" required>
+        <span class="hint">Solo este nombre aparece. Tu número nadie lo ve.</span>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Título del aviso</span>
+        <input type="text" id="titulo" placeholder="ej: Fisioterapeuta · rehabilitación por videollamada" maxlength="80" required>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Descripción</span>
+        <textarea id="descripcion" rows="3" maxlength="300" placeholder="Detalla tu servicio. No incluyas tu número ni datos personales aquí." required></textarea>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Pretensión económica</span>
+        <input type="text" id="pretension" placeholder="ej: S/. 40 por sesión virtual" required>
+      </div>
+
+      <div class="field">
+        <span class="lbl">Tu WhatsApp (no se muestra)</span>
+        <input type="tel" id="whatsapp" placeholder="+51 999 999 999" required>
+        <span class="hint">Solo para recibir consultas. Nadie más lo ve.</span>
+      </div>
+
+      <div class="terms">
+        <input type="checkbox" id="terminos" required>
+        <span>Declaro que el aviso es verídico. Entiendo que TrujiAvisos es solo un canal de conexión y no interviene en ningún acuerdo entre las partes.</span>
+      </div>
+
+      <button class="btn-pub" id="btn-pub" onclick="publicar()">Publicar aviso gratis</button>
+      <div id="msg"></div>
+
+      <div class="divider"><div class="divider-line"></div><span>o publica por</span><div class="divider-line"></div></div>
+      <a class="wa-btn" id="wa-link" href="#" target="_blank">📱 Publicar por WhatsApp</a>
+
+    </div>
+  </div>
+</div>
+
+<div class="foot">TRUJIAVISOS.COM · TRUJILLO, LA LIBERTAD, PERÚ</div>
+
+<script>
+const SUPABASE_URL = 'https://TU-PROYECTO.supabase.co';
+const SUPABASE_KEY = 'TU-ANON-KEY';
+const BOT_WA = '51999999999';
+
+document.getElementById('wa-link').href =
+  `https://wa.me/${BOT_WA}?text=AVISO%0ANick%3A%20%0ACategor%C3%ADa%3A%20%0AT%C3%ADtulo%3A%20%0ADescripci%C3%B3n%3A%20%0APretens%C3%B3n%3A%20%0AEgresado%3A%20S%C3%AD%20%2F%20No`;
+
+async function publicar() {
+  const cat = document.querySelector('input[name="categoria"]:checked');
+  const eg  = document.querySelector('input[name="egresado"]:checked');
+  const nick = document.getElementById('nick').value.trim();
+  const titulo = document.getElementById('titulo').value.trim();
+  const desc = document.getElementById('descripcion').value.trim();
+  const pret = document.getElementById('pretension').value.trim();
+  const wa   = document.getElementById('whatsapp').value.trim();
+  const term = document.getElementById('terminos').checked;
+  const msg  = document.getElementById('msg');
+  const btn  = document.getElementById('btn-pub');
+
+  if (!cat) return show(msg, 'Selecciona una categoría.', 'err');
+  if (!nick || !titulo || !desc || !pret || !wa)
+    return show(msg, 'Completa todos los campos.', 'err');
+  if (!term) return show(msg, 'Acepta los términos para continuar.', 'err');
+
+  btn.disabled = true;
+  btn.textContent = 'Publicando...';
+
+  try {
+    const expira = new Date(Date.now() + 24*60*60*1000).toISOString();
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/avisos`, {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify({
+        nick, categoria: cat.value, titulo,
+        descripcion: desc, pretension: pret,
+        egresado: eg?.value === 'si',
+        whatsapp_hash: wa.replace(/\D/g,'').slice(-6),
+        estado: 'activo', expira_at: expira, urgente: false
+      })
+    });
+    const data = await res.json();
+    const codigo = `TVA-${String(data[0].id).padStart(4,'0')}`;
+    show(msg, `✅ Aviso publicado. Tu código: <strong>${codigo}</strong><br><small>Guárdalo para eliminar tu aviso.</small><br><a href="index.html" style="color:#0a2463">← Ver todos los avisos</a>`, 'ok');
+  } catch(e) {
+    show(msg, 'Error al publicar. Verifica tu conexión.', 'err');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Publicar aviso gratis';
+  }
+}
+
+function show(el, html, tipo) {
+  el.innerHTML = html;
+  el.className = tipo === 'ok' ? 'msg-ok' : 'msg-err';
+  el.style.display = 'block';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrujiAvisos · Oficios y Clasificados de Trujillo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --azul: #0a2463; --azul2: #071a4a; --rojo: #c1121f;
+  --gris: #f4f6fa; --borde: rgba(10,36,99,0.1);
+  --texto: #1a1a2e; --muted: #6b7280; --eg: #854d0e;
+}
+body { font-family: 'Inter', sans-serif; background: var(--gris); color: var(--texto); }
+
+.topbar { background: var(--rojo); display: flex; justify-content: space-between; align-items: center; padding: 6px 24px; }
+.topbar-l { font-size: 10px; color: rgba(255,255,255,.85); letter-spacing: .06em; }
+.topbar-r { display: flex; gap: 8px; }
+.tbadge { font-size: 9px; font-weight: 700; padding: 2px 10px; border-radius: 20px; }
+.tb-live { background: rgba(255,255,255,.2); color: white; animation: blink 2s infinite; }
+.tb-v { background: rgba(255,255,255,.1); color: white; }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.4} }
+
+.hero { background: var(--azul); }
+.hero-center { padding: 24px 24px 0; text-align: center; }
+.hero-eye { font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 8px; }
+.hero-logo { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; letter-spacing: -2px; line-height: 1; color: white; margin-bottom: 6px; }
+.hero-logo em { color: var(--rojo); font-style: normal; }
+.hero-tagline { font-size: 12px; color: rgba(255,255,255,.45); letter-spacing: .08em; margin-bottom: 22px; }
+
+.sec-tabs { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; padding-bottom: 20px; }
+.stab { padding: 9px 18px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); color: rgba(255,255,255,.65); border-radius: 28px; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 7px; }
+.stab:hover { background: rgba(255,255,255,.14); color: white; }
+.stab.on { background: var(--rojo); border-color: var(--rojo); color: white; }
+.sdot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.d-salud{background:#34d399;} .d-hogar{background:#60a5fa;}
+.d-belleza{background:#f472b6;} .d-cocina{background:#fbbf24;}
+.d-tecnico{background:#a78bfa;} .d-clasif{background:#fb923c;}
+
+.ticker { background: var(--azul2); display: flex; align-items: center; overflow: hidden; border-top: 1px solid rgba(255,255,255,.06); }
+.tick-pill { background: var(--rojo); color: white; font-size: 10px; font-weight: 700; letter-spacing: .1em; padding: 8px 14px; white-space: nowrap; flex-shrink: 0; }
+.tick-track { overflow: hidden; flex: 1; }
+.tick-items { display: flex; gap: 24px; animation: slide 32s linear infinite; white-space: nowrap; padding: 8px 14px; }
+@keyframes slide { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ti { font-size: 11px; color: rgba(255,255,255,.55); }
+.tdot { color: var(--rojo); margin: 0 4px; }
+
+.layout { display: grid; grid-template-columns: 1fr 282px; }
+.col-main { border-right: 1px solid var(--borde); background: white; }
+.col-head { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--borde); background: var(--gris); }
+.ch-t { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.ch-c { font-size: 11px; color: var(--muted); }
+
+/* LISTING NORMAL */
+.listing { display: grid; grid-template-columns: 62px 1fr 100px; border-bottom: 1px solid var(--borde); cursor: pointer; transition: background .15s; }
+.listing:hover { background: #f8f9ff; }
+
+/* LISTING EGRESADO — destacado */
+.listing.egresado { border-left: 4px solid #ca8a04; background: #fffbeb; }
+.listing.egresado:hover { background: #fef9c3; }
+
+.l-left { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 6px; gap: 6px; background: var(--gris); border-right: 1px solid var(--borde); }
+.listing.egresado .l-left { background: #fef3c7; }
+.l-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+.ic-salud{background:#d1fae5;} .ic-hogar{background:#dbeafe;}
+.ic-belleza{background:#fce7f3;} .ic-cocina{background:#fef3c7;}
+.ic-tecnico{background:#ede9fe;} .ic-clasif{background:#fff7ed;}
+.l-cat-lbl { font-size: 8px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: center; line-height: 1.3; }
+
+.l-body { padding: 13px 15px; }
+.eg-banner { font-size: 10px; font-weight: 700; color: var(--eg); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+.l-title { font-size: 14px; font-weight: 500; line-height: 1.4; color: var(--texto); margin-bottom: 3px; }
+.listing.egresado .l-title { font-weight: 700; }
+.l-meta { font-size: 12px; color: var(--muted); line-height: 1.5; margin-bottom: 6px; }
+.l-precio { font-size: 14px; font-weight: 700; color: var(--azul); margin-bottom: 7px; }
+.l-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag { font-size: 10px; font-weight: 500; padding: 3px 9px; border-radius: 20px; }
+.t-v   { background: #dbeafe; color: #1e3a8a; }
+.t-new { background: #d1fae5; color: #065f46; }
+.t-urg { background: #fee2e2; color: #7f1d1d; }
+.t-dir { background: #f3e8ff; color: #4c1d95; }
+
+.timer-bar { height: 2px; background: var(--borde); border-radius: 2px; overflow: hidden; margin-top: 9px; }
+.timer-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--azul), var(--rojo)); }
+
+.l-right { padding: 13px 11px; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; border-left: 1px solid var(--borde); }
+.l-cod { font-size: 9px; font-family: monospace; color: var(--muted); }
+.btn-ver { background: var(--azul); color: white; border: none; padding: 8px 12px; font-size: 11px; font-weight: 600; border-radius: 8px; cursor: pointer; transition: background .15s; white-space: nowrap; }
+.btn-ver:hover { background: var(--rojo); }
+.listing.egresado .btn-ver { background: #ca8a04; }
+.listing.egresado .btn-ver:hover { background: var(--rojo); }
+.l-time { font-size: 9px; color: var(--muted); }
+
+.clasif-divider { padding: 14px 20px; background: var(--azul); color: white; display: flex; align-items: center; gap: 12px; }
+.clasif-div-t { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+.clasif-div-s { font-size: 11px; color: rgba(255,255,255,.5); }
+.clasif-aviso { padding: 10px 16px; background: #fff7ed; border: 1px solid #fed7aa; margin: 10px 20px; border-radius: 8px; font-size: 11px; color: #7c2d12; line-height: 1.7; }
+
+.col-foot { padding: 12px 20px; text-align: center; font-size: 12px; color: var(--muted); background: var(--gris); border-top: 1px solid var(--borde); }
+.col-foot a { color: var(--rojo); cursor: pointer; }
+
+/* SIDEBAR */
+.col-side { background: var(--gris); }
+.pub-cta { display: block; margin: 16px; background: var(--azul); color: white; padding: 18px; border-radius: 14px; text-align: center; cursor: pointer; text-decoration: none; transition: background .2s; }
+.pub-cta:hover { background: var(--rojo); }
+.pub-cta-t { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+.pub-cta-s { font-size: 11px; color: rgba(255,255,255,.6); line-height: 1.6; }
+
+/* WA PUBLISH */
+.wa-pub { display: block; margin: 0 16px 14px; background: #16a34a; color: white; padding: 14px 16px; border-radius: 12px; text-align: center; text-decoration: none; transition: background .2s; }
+.wa-pub:hover { background: #15803d; }
+.wa-pub-t { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.wa-pub-s { font-size: 11px; color: rgba(255,255,255,.7); }
+
+.scard { margin: 0 16px 14px; background: white; border: 1px solid var(--borde); border-radius: 12px; overflow: hidden; }
+.sc-head { padding: 10px 15px; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); background: var(--gris); border-bottom: 1px solid var(--borde); }
+.sc-body { padding: 14px 15px; }
+.aform { display: flex; flex-direction: column; gap: 10px; }
+.af-lbl { font-size: 10px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 3px; }
+select, input[type=text], input[type=tel] { width: 100%; border: 1px solid var(--borde); padding: 8px 10px; font-size: 12px; font-family: 'Inter',sans-serif; color: var(--texto); background: var(--gris); border-radius: 8px; outline: none; }
+select:focus, input:focus { border-color: var(--azul); }
+.btn-alerta { width: 100%; background: var(--rojo); color: white; border: none; padding: 10px; font-size: 12px; font-weight: 700; border-radius: 8px; cursor: pointer; margin-top: 2px; }
+.btn-alerta:hover { background: #960e18; }
+
+/* EGRESADOS CARD */
+.eg-card { background: #fffbeb; border: 1px solid #fde68a; border-radius: 12px; overflow: hidden; margin: 0 16px 14px; }
+.eg-head { padding: 10px 15px; background: #ca8a04; color: white; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.eg-body { padding: 14px 15px; display: flex; flex-direction: column; gap: 9px; }
+.eg-item { display: flex; gap: 9px; font-size: 12px; color: var(--texto); line-height: 1.6; align-items: flex-start; }
+.eg-icon { flex-shrink: 0; font-size: 14px; margin-top: 1px; }
+
+.steps { display: flex; flex-direction: column; gap: 12px; }
+.step { display: flex; gap: 10px; align-items: flex-start; }
+.sn { width: 22px; height: 22px; border-radius: 50%; background: var(--azul); color: white; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+.st { font-size: 12px; color: var(--texto); line-height: 1.55; }
+.st small { display: block; font-size: 11px; color: var(--muted); margin-top: 1px; }
+
+.prohibido { margin: 0 16px 14px; padding: 12px 14px; background: #fff5f5; border-radius: 10px; border-left: 3px solid var(--rojo); font-size: 11px; color: #7f1d1d; line-height: 1.9; }
+.disc { margin: 0 16px 16px; padding: 12px 14px; background: #f0f4ff; border-radius: 10px; border-left: 3px solid var(--azul); font-size: 11px; color: #1e3a8a; line-height: 1.7; }
+
+.foot { background: var(--azul); color: rgba(255,255,255,.3); font-size: 10px; text-align: center; padding: 16px; letter-spacing: .06em; line-height: 2; }
+.foot-line { width: 32px; height: 2px; background: var(--rojo); margin: 6px auto; }
+
+@media(max-width:720px){
+  .layout { grid-template-columns: 1fr; }
+  .hero-logo { font-size: 38px; }
+  .listing { grid-template-columns: 50px 1fr 80px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-l" id="hdate">TRUJILLO, LA LIBERTAD · PERÚ</span>
+  <div class="topbar-r">
+    <span class="tbadge tb-live">● EN VIVO</span>
+    <span class="tbadge tb-v">📱 VIRTUAL</span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-center">
+    <div class="hero-eye">La plataforma de Trujillo</div>
+    <div class="hero-logo">Truji<em>Avisos</em></div>
+    <div class="hero-tagline">Salud · Hogar · Bienestar · Cocina · Técnicos · Clasificados · Persona a persona</div>
+    <div class="sec-tabs">
+      <div class="stab on" data-cat="todos">Todos</div>
+      <div class="stab" data-cat="salud"><span class="sdot d-salud"></span>Salud</div>
+      <div class="stab" data-cat="hogar"><span class="sdot d-hogar"></span>Hogar</div>
+      <div class="stab" data-cat="belleza"><span class="sdot d-belleza"></span>Belleza</div>
+      <div class="stab" data-cat="cocina"><span class="sdot d-cocina"></span>Cocina</div>
+      <div class="stab" data-cat="tecnico"><span class="sdot d-tecnico"></span>Técnicos</div>
+      <div class="stab" data-cat="clasif"><span class="sdot d-clasif"></span>Clasificados</div>
+    </div>
+  </div>
+  <div class="ticker">
+    <div class="tick-pill">NUEVOS</div>
+    <div class="tick-track"><div class="tick-items">
+      <span class="ti">🩺 Fisioterapeuta egresada · S/. 35 sesión virtual</span><span class="tdot">·</span>
+      <span class="ti">👩‍⚕️ Técnica enfermería · orientación virtual · S/. 40</span><span class="tdot">·</span>
+      <span class="ti">🔧 Electricista · diagnóstico videollamada · S/. 30</span><span class="tdot">·</span>
+      <span class="ti">🍳 Cocinera egresada · menú familiar · S/. 40/sesión</span><span class="tdot">·</span>
+      <span class="ti">💆 Masajista · guía virtual · S/. 35</span><span class="tdot">·</span>
+      <span class="ti">🏠 Se alquila dpto amoblado · El Golf</span><span class="tdot">·</span>
+      <span class="ti">🩺 Fisioterapeuta egresada · S/. 35 sesión virtual</span><span class="tdot">·</span>
+      <span class="ti">👩‍⚕️ Técnica enfermería · orientación virtual · S/. 40</span><span class="tdot">·</span>
+      <span class="ti">🔧 Electricista · diagnóstico videollamada · S/. 30</span><span class="tdot">·</span>
+      <span class="ti">🍳 Cocinera egresada · menú familiar · S/. 40/sesión</span><span class="tdot">·</span>
+      <span class="ti">💆 Masajista · guía virtual · S/. 35</span><span class="tdot">·</span>
+      <span class="ti">🏠 Se alquila dpto amoblado · El Golf</span><span class="tdot">·</span>
+    </div></div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="col-main">
+    <div class="col-head">
+      <span class="ch-t">Disponibles hoy</span>
+      <span class="ch-c" id="cnt">8 avisos · expiran en 24h</span>
+    </div>
+    <div id="lst">
+
+      <!-- EGRESADO -->
+      <div class="listing egresado" data-cat="salud">
+        <div class="l-left"><div class="l-icon ic-salud">🩺</div><span class="l-cat-lbl">Salud</span></div>
+        <div class="l-body">
+          <div class="eg-banner">⭐ Recién egresada · fisioterapia</div>
+          <div class="l-title">Fisioterapeuta · rehabilitación y ejercicios guiados</div>
+          <div class="l-meta">Videollamada · evaluación inicial · plan personalizado · primera sesión de presentación sin costo</div>
+          <div class="l-precio">S/. 35 por sesión virtual</div>
+          <div class="l-tags"><span class="tag t-v">📱 virtual</span><span class="tag t-new">disponible hoy</span></div>
+          <div class="timer-bar"><div class="timer-fill" style="width:92%"></div></div>
+        </div>
+        <div class="l-right"><span class="l-cod">TVA-0541</span><button class="btn-ver">Contactar</button><span class="l-time">hace 1 h</span></div>
+      </div>
+
+      <div class="listing" data-cat="salud">
+        <div class="l-left"><div class="l-icon ic-salud">👩‍⚕️</div><span class="l-cat-lbl">Salud</span></div>
+        <div class="l-body">
+          <div class="l-title">Técnica en enfermería · orientación de síntomas</div>
+          <div class="l-meta">Videollamada · evaluación guiada · urgencias atendidas · disponible hoy</div>
+          <div class="l-precio">S/. 40 por consulta virtual</div>
+          <div class="l-tags"><span class="tag t-v">📱 virtual</span><span class="tag t-urg">urgencias</span></div>
+          <div class="timer-bar"><div class="timer-fill" style="width:78%"></div></div>
+        </div>
+        <div class="l-right"><span class="l-cod">TVA-0539</span><button class="btn-ver">Contactar</button><span class="l-time">hace 5 h</span></div>
+      </div>
+
+      <div class="listing" data-cat="salud">
+        <div class="l-left"><div class="l-icon ic-salud">🧑‍🦽</div><span class="l-cat-lbl">Cuidado</span></div>
+        <div class="l-body">
+          <div class="l-title">Cuidadora de adulto mayor · acompañamiento virtual</div>
+          <div class="l-meta">Videollamada · supervisión de medicación · coordinación de rutinas</div>
+          <div class="l-precio">S/. 30 por hora</div>
+          <div class="l-tags"><span class="tag t-v">📱 virtual</span><span class="tag t-dir">persona a persona</span></div>
+          <div class="timer-bar"><div class="timer-fill" style="width:62%"></div></div>
+        </div>
+        <div class="l-right"><span class="l-cod">TVA-0537</span><button class="btn-ver">Contactar</button><span class="l-time">hace 9 h</span></div>
+      </div>
+
+      <!-- EGRESADO -->
+      <div class="listing egresado" data-cat="hogar">
+        <div class="l-left"><div class="l-icon ic-hogar">🔧</div><span class="l-cat-lbl">Hogar</span></div>
+        <div class="l-body">
+          <div class="eg-banner">⭐ Recién egresado · electricidad</div>
+          <div class="l-title">Electricista · diagnóstico y guía de reparación por videollamada</div>
+          <div class="l-meta">Ve el problema por cámara · instrucciones paso a paso · presupuesto sin costo</div>
+          <div class="l-precio">S/. 25 por diagnóstico virtual</div>
+          <div class="l-tags"><span class="tag t-v">📱 virtual</span><span class="tag t-new">nuevo</span></div>
+          <div class="timer-bar"><div class="timer-fill" style="width:80%"></div></div>
+        </div>
+        <div class="l-right"><span class="l-cod">TVA-0535</span><button class="btn-ver">Contactar</button><span class="l-time">hace 4 h</span></div>
+      </div>
+
+      <div class="listing" data-cat="belleza">
+        <div class="l-left"><div class="l-icon ic-belleza">💆</div><span class="l-cat-lbl">Bienestar</span></div>
+        <div class="l-body">
+          <div class="l-title">Masajista terapéutica · técnicas de alivio guiadas</div>
+          <div class="l-meta">Videollamada · rutinas de relajación · ejercicios de alivio muscular</div>
+          <div class="l-precio">S/. 35 por sesión virtual</div>
+          <div class="l-tags"><span class="tag t-v">📱 virtual</span><span class="tag t-dir">persona a persona</span></div>
+          <div class="timer-bar"><div class="timer-fill" style="width:50%"></div></div>
+        </div>
+        <div class="l-right"><span class="l-cod">TVA-0533</span><button class="btn-ver">Contactar</button><span class="l-time">hace 12 h</span></div>
+      </div>
+
+      <!-- EGRESADO -->
+      <div class="listing egresado" data-cat="cocina">
+        <div class="l-left"><div class="l-icon ic-cocina">🍳</div><span class="l-cat-lbl">Cocina</span></div>
+        <div class="l-body">
+          <div class="eg-banner">⭐ Recién egresada · gastronomía</div>
+          <div class="l-title">Cocinera · planificación de menú semanal familiar</div>
+          <div class="l-meta">Videollamada · menú personalizado · lista de compras · guía de preparación</div>
+          <div class="l-precio">S/. 40 por sesión · primera gratis</div>
+          <div class="l-tags"><span class="tag t-v">📱 virtual</span><span class="tag t-new">nuevo</span></div>
+          <div class="timer-bar"><div class="timer-fill" style="width:88%"></div></div>
+        </div>
+        <div class="l-right"><span class="l-cod">TVA-0531</span><button class="btn-ver">Contactar</button><span class="l-time">hace 2 h</span></div>
+      </div>
+
+      <div class="listing" data-cat="tecnico">
+        <div class="l-left"><div class="l-icon ic-tecnico">❄️</div><span class="l-cat-lbl">Técnico</span></div>
+        <div class="l-body">
+          <div class="l-title">Técnico en refrigeración · diagnóstico remoto de equipos</div>
+          <div class="l-meta">Videollamada · identifica el problema · orienta la reparación</div>
+          <div class="l-precio">S/. 25 por diagnóstico virtual</div>
+          <div class="l-tags"><span class="tag t-v">📱 virtual</span><span class="tag t-urg">urgencias</span></div>
+          <div class="timer-bar"><div class="timer-fill" style="width:70%"></div></div>
+        </div>
+        <div class="l-right"><span class="l-cod">TVA-0529</span><button class="btn-ver">Contactar</button><span class="l-time">hace 6 h</span></div>
+      </div>
+
+      <!-- CLASIFICADOS -->
+      <div class="clasif-divider" id="clasif-div">
+        <div>
+          <div class="clasif-div-t">📋 Clasificados · Compra, Venta y Alquiler</div>
+          <div class="clasif-div-s">Solo particulares · Sin servicios · Persona a persona</div>
+        </div>
+      </div>
+      <div class="clasif-aviso" id="clasif-aviso">
+        <strong>⚠️ Prohibido:</strong> servicios sexuales · teléfonos, audífonos, relojes y electrónicos de marca · negocios o empresas. Solo personas naturales.
+      </div>
+
+      <div class="listing" data-cat="clasif">
+        <div class="l-left"><div class="l-icon ic-clasif">🏠</div><span class="l-cat-lbl">Alquiler</span></div>
+        <div class="l-body">
+          <div class="l-title">Departamento amoblado · 2 dormitorios · El Golf</div>
+          <div class="l-meta">Agua y luz incluidas · disponible de inmediato · particular</div>
+          <div class="l-precio">Precio a coordinar entre partes</div>
+          <div class="l-tags"><span class="tag t-new">nuevo</span><span class="tag t-dir">particular</span></div>
+          <div class="timer-bar"><div class="timer-fill" style="width:85%"></div></div>
+        </div>
+        <div class="l-right"><span class="l-cod">TVA-0527</span><button class="btn-ver">Consultar</button><span class="l-time">hace 3 h</span></div>
+      </div>
+
+      <div class="listing" data-cat="clasif">
+        <div class="l-left"><div class="l-icon ic-clasif">🚗</div><span class="l-cat-lbl">Venta</span></div>
+        <div class="l-body">
+          <div class="l-title">Toyota Yaris 2019 · 68,000 km · full equipo</div>
+          <div class="l-meta">Automático · placa vigente · SOAT al día · particular</div>
+          <div class="l-precio">Precio a coordinar entre partes</div>
+          <div class="l-tags"><span class="tag t-urg">urgente</span><span class="tag t-dir">particular</span></div>
+          <div class="timer-bar"><div class="timer-fill" style="width:55%"></div></div>
+        </div>
+        <div class="l-right"><span class="l-cod">TVA-0525</span><button class="btn-ver">Consultar</button><span class="l-time">hace 10 h</span></div>
+      </div>
+
+    </div>
+    <div class="col-foot">9 avisos activos · expiran en 24h · <a>Ver todos →</a></div>
+  </div>
+
+  <div class="col-side">
+
+    <a class="pub-cta" href="#">
+      <div class="pub-cta-t">+ Publicar mis servicios</div>
+      <div class="pub-cta-s">Gratis · automático · desaparece en 24h<br>Sin registro · sin agencias</div>
+    </a>
+
+    <a class="wa-pub" href="https://wa.me/51999999999?text=AVISO%0ACategor%C3%ADa%3A%20%0ADescripci%C3%B3n%3A%20%0APretens%C3%B3n%3A%20S%2F.%20%0ASoy%20reci%C3%A9n%20egresado%3A%20S%C3%AD%20%2F%20No" target="_blank">
+      <div class="wa-pub-t">📱 Publicar por WhatsApp</div>
+      <div class="wa-pub-s">Escríbenos · el bot lo publica automáticamente</div>
+    </a>
+
+    <div class="eg-card">
+      <div class="eg-head">⭐ Espacio para recién egresados</div>
+      <div class="eg-body">
+        <div class="eg-item"><span class="eg-icon">✊</span><span>Si eres recién egresado tu aviso aparece <strong>destacado en amarillo</strong> — visible antes que los demás.</span></div>
+        <div class="eg-item"><span class="eg-icon">📱</span><span>Atiende desde donde estés por videollamada. Sin consultorio, sin equipo costoso.</span></div>
+        <div class="eg-item"><span class="eg-icon">⭐</span><span>Ofrece una primera sesión gratis para construir tu reputación con reseñas reales.</span></div>
+        <div class="eg-item"><span class="eg-icon">🎯</span><span>Tu precio lo fijas tú. Sin intermediarios </span></div>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="sc-head">🔔 Alertas en tiempo real</div>
+      <div class="sc-body">
+        <div class="aform">
+          <div><label class="af-lbl">Categoría</label>
+            <select><option>Todas</option><option>Salud y cuidado</option><option>Hogar</option><option>Belleza</option><option>Cocina</option><option>Técnicos</option><option>Clasificados</option></select></div>
+          <div><label class="af-lbl">Palabras clave</label>
+            <input type="text" placeholder="ej: fisioterapia, electricista..."></div>
+          <div><label class="af-lbl">Tu WhatsApp</label>
+            <input type="tel" placeholder="+51 999 999 999"></div>
+          <button class="btn-alerta">Activar alerta gratuita</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scard">
+      <div class="sc-head">⚡ Cómo funciona</div>
+      <div class="sc-body">
+        <div class="steps">
+          <div class="step"><span class="sn">1</span><div class="st">Publicas por web o WhatsApp.<small>Automático · listo en 60 segundos.</small></div></div>
+          <div class="step"><span class="sn">2</span><div class="st">El solicitante te contacta directo.<small>Sin demoras · contacto directo.</small></div></div>
+          <div class="step"><span class="sn">3</span><div class="st">Se conocen por videollamada.<small>Coordinan precio y condiciones entre ellos.</small></div></div>
+          <div class="step"><span class="sn">⏱</span><div class="st">El aviso expira en 24 horas.<small>Base de datos siempre limpia.</small></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prohibido">
+      <strong>⚠️ No se aceptan:</strong><br>
+      · Servicios sexuales de ningún tipo<br>
+      · Teléfonos, audífonos, relojes, electrónicos<br>
+      · Restaurantes, negocios o empresas<br>
+      · Agencias de empleo<br><br>
+      Solo personas naturales. Los avisos que incumplan se eliminan automáticamente.
+    </div>
+
+    <div class="disc">
+      <strong>TrujiAvisos es una plataforma de conexión automatizada.</strong> No representa ni asume responsabilidad por los acuerdos entre usuarios. Cada parte actúa bajo su propia responsabilidad.
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  TRUJIAVISOS.COM · TRUJILLO, LA LIBERTAD, PERÚ
+  <div class="foot-line"></div>
+  Plataforma automatizada · Oficios y clasificados · Avisos vigentes 24 horas<br>
+  El operador no interviene en ninguna transacción · Solo persona a persona
+</div>
+
+<script>
+document.querySelectorAll('.stab').forEach(b => {
+  b.addEventListener('click', () => {
+    document.querySelectorAll('.stab').forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    const cat = b.dataset.cat;
+    let n = 0;
+    document.querySelectorAll('.listing').forEach(r => {
+      const show = cat === 'todos' || r.dataset.cat === cat;
+      r.style.display = show ? 'grid' : 'none';
+      if (show) n++;
+    });
+    const div = document.getElementById('clasif-div');
+    const aviso = document.getElementById('clasif-aviso');
+    const showClasif = cat === 'todos' || cat === 'clasif';
+    div.style.display = showClasif ? 'flex' : 'none';
+    aviso.style.display = showClasif ? 'block' : 'none';
+    document.getElementById('cnt').textContent =
+      `${n} aviso${n!==1?'s':''} · expiran en 24h`;
+  });
+});
+const d = new Date();
+const dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+document.getElementById('hdate').textContent =
+  `${dias[d.getDay()].toUpperCase()} ${d.getDate()} DE ${meses[d.getMonth()].toUpperCase()} ${d.getFullYear()} · TRUJILLO, LA LIBERTAD`;
+</script>
+</body>
+</html>
